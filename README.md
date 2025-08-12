@@ -1,2 +1,3 @@
 # globus-ridiculous
-A grand strategy game where you can change the rules.
+
+An in-browser grand strategy game to play with friends or AI where you can change the rules.
