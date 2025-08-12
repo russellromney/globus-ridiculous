@@ -20,12 +20,14 @@ body {
 /* Game Board */
 #board {
     display: grid;
-    grid-template-columns: repeat(5, 120px);
-    grid-template-rows: repeat(4, 120px);
+    grid-template-columns: repeat(7, minmax(60px, 12vh));
+    grid-template-rows: repeat(7, minmax(60px, 12vh));
     gap: 2px;
     background: #000;
     padding: 2px;
     height: fit-content;
+    max-width: calc(100vw - 320px - 40px); /* Account for sidebar width and padding */
+    max-height: calc(100vh - 40px); /* Account for padding */
 }
 
 .province {
@@ -89,7 +91,7 @@ body {
 
 /* Province ID */
 .province-id {
-    font-size: 24px;
+    font-size: min(20px, 3vh);
     font-weight: bold;
     color: white;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
@@ -99,17 +101,17 @@ body {
 /* Army display */
 .army {
     position: absolute;
-    bottom: 5px;
-    width: 50px;
-    height: 50px;
+    bottom: 3px;
+    width: min(40px, 60%);
+    height: min(40px, 60%);
     border-radius: 50%;
-    border: 3px solid #000;
+    border: 2px solid #000;
     background: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: 16px;
+    font-size: min(12px, 2vh);
     color: white;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
@@ -127,19 +129,45 @@ body {
     background: radial-gradient(circle, #32AB32, #228B22); 
 }
 
+/* Morale indicators */
+.army.high-morale {
+    border: 4px solid #FFD700;
+    box-shadow: 0 0 15px #FFD700;
+    animation: glow-gold 2s infinite;
+}
+
+.army.low-morale {
+    border: 4px solid #FF4444;
+    opacity: 0.7;
+    filter: grayscale(0.3);
+}
+
+.army.normal-morale {
+    border: 3px solid #000;
+}
+
+@keyframes glow-gold {
+    0%, 100% { 
+        box-shadow: 0 0 15px #FFD700;
+    }
+    50% { 
+        box-shadow: 0 0 25px #FFD700, 0 0 35px #FFD700;
+    }
+}
+
 /* Move button */
 .move-btn {
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 3px;
+    left: 3px;
     background: linear-gradient(135deg, #00FF00, #00CC00);
     color: black;
-    padding: 5px 12px;
-    border: 2px solid #000;
-    border-radius: 4px;
+    padding: 2px 6px;
+    border: 1px solid #000;
+    border-radius: 3px;
     font-weight: bold;
     cursor: pointer;
-    font-size: 12px;
+    font-size: min(10px, 1.5vh);
     z-index: 20;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
@@ -152,16 +180,16 @@ body {
 /* Build button */
 .build-btn {
     position: absolute;
-    bottom: 5px;
-    left: 5px;
+    bottom: 3px;
+    left: 3px;
     background: linear-gradient(135deg, #FFD700, #FFA500);
     color: black;
-    padding: 5px 12px;
-    border: 2px solid #000;
-    border-radius: 4px;
+    padding: 2px 6px;
+    border: 1px solid #000;
+    border-radius: 3px;
     font-weight: bold;
     cursor: pointer;
-    font-size: 12px;
+    font-size: min(10px, 1.5vh);
     z-index: 20;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     opacity: 0;
@@ -300,6 +328,182 @@ button:disabled {
 
 .game-over button:hover {
     background: linear-gradient(135deg, #229954, #27ae60);
+}
+
+/* Movement arrows */
+.movement-arrow {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 0, 0.9);
+    border: 3px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: black;
+    z-index: 15;
+    animation: pulse-arrow 1s infinite;
+}
+
+.movement-arrow:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.movement-arrow.arrow-right {
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.movement-arrow.arrow-right:before {
+    border-left: 15px solid #000;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    right: -18px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.movement-arrow.arrow-left {
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.movement-arrow.arrow-left:before {
+    border-right: 15px solid #000;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    left: -18px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.movement-arrow.arrow-up {
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.movement-arrow.arrow-up:before {
+    border-bottom: 15px solid #000;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.movement-arrow.arrow-down {
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.movement-arrow.arrow-down:before {
+    border-top: 15px solid #000;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@keyframes pulse-arrow {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1) translateY(-50%);
+    }
+    50% { 
+        opacity: 0.7;
+        transform: scale(1.1) translateY(-50%);
+    }
+}
+
+.movement-arrow.arrow-left {
+    animation: pulse-arrow-left 1s infinite;
+}
+
+.movement-arrow.arrow-up {
+    animation: pulse-arrow-up 1s infinite;
+}
+
+.movement-arrow.arrow-down {
+    animation: pulse-arrow-down 1s infinite;
+}
+
+@keyframes pulse-arrow-left {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1) translateY(-50%);
+    }
+    50% { 
+        opacity: 0.7;
+        transform: scale(1.1) translateY(-50%);
+    }
+}
+
+@keyframes pulse-arrow-up {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1) translateX(-50%);
+    }
+    50% { 
+        opacity: 0.7;
+        transform: scale(1.1) translateX(-50%);
+    }
+}
+
+@keyframes pulse-arrow-down {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1) translateX(-50%);
+    }
+    50% { 
+        opacity: 0.7;
+        transform: scale(1.1) translateX(-50%);
+    }
+}
+
+/* Conquest indicator */
+.conquest-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 165, 0, 0.9);
+    border: 3px solid #FF8C00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: min(14px, 2vh);
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    z-index: 25;
+    animation: pulse-conquest 1.5s infinite;
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.7);
+}
+
+@keyframes pulse-conquest {
+    0%, 100% { 
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% { 
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
 }
 
 /* Info section */
